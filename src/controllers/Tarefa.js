@@ -15,46 +15,47 @@ const criarTabelaTarefa = async () =>{
     await criarTabelaTarefa.close();
 }
 
-const buscarTarefas = async () =>{
+const buscarTarefasUsuario = async (usuario_id) =>{
     const buscarTarefasDB = await openDB();
-    let tarefas = await buscarTarefasDB.all(`SELECT * FROM Tarefa`);
+    let tarefas = await buscarTarefasDB.all(`SELECT * FROM Tarefa WHERE usuario_id = ?`, [usuario_id]);
     return tarefas;
+
 }
 
-const buscarTarefa = async (id) =>{
-    const buscarTarefaDB = await openDB();
-    let tarefa = await buscarTarefaDB.get(`SELECT * FROM Tarefa WHERE id = ?`, [id]);
+const buscarTarefaId = async (params_id, user_id) =>{
+    const buscarTarefaIdDB = await openDB();
+    let tarefa = await buscarTarefaIdDB.get(`SELECT * FROM Tarefa WHERE id = ? AND usuario_id = ?`, [params_id, user_id]);
     return tarefa;
 }
 
-const inserirTarefa = async (tarefa) =>{
+const inserirTarefa = async (tarefa, usuario_id) =>{
     const inserirTarefaDB = await openDB();
     await inserirTarefaDB.run(`
         INSERT INTO Tarefa (titulo, descricao, status, usuario_id) VALUES (?, ?, ?, ?)
-    `, [tarefa.titulo, tarefa.descricao, tarefa.status, tarefa.usuario_id]);
+    `, [tarefa.titulo, tarefa.descricao, tarefa.status, usuario_id]);
     await inserirTarefaDB.close();
 }
 
-const alterarTarefa = async (tarefa, id) =>{
+const alterarTarefa = async (tarefa, id_params, user_id) =>{
     const alterarTarefaDB = await openDB();
     await alterarTarefaDB.run(`
-        UPDATE Tarefa SET titulo = ?, descricao = ?, status = ? usuario_id = ? WHERE id = ?
-    `, [tarefa.titulo, tarefa.descricao, tarefa.status, tarefa.usuario_id, id]);
+        UPDATE Tarefa SET titulo = ?, descricao = ?, status = ? WHERE id = ? AND usuario_id = ?
+    `, [tarefa.titulo, tarefa.descricao, tarefa.status, id_params, user_id]);
     await alterarTarefaDB.close();
 }
 
-const deletarTarefa = async (id) =>{
+const deletarTarefa = async (tarefa, user_id) =>{
     const deletarTarefaDB = await openDB();
     await deletarTarefaDB.run(`
-        DELETE FROM Tarefa WHERE id = ?
-    `, [id]);
+        DELETE FROM Tarefa WHERE id = ? AND usuario_id = ?
+    `, [tarefa, user_id]);
     await deletarTarefaDB.close();
 }
 
 module.exports = {
     criarTabelaTarefa,
-    buscarTarefa,
-    buscarTarefas,
+    buscarTarefasUsuario, 
+    buscarTarefaId,
     inserirTarefa,
     alterarTarefa,
     deletarTarefa
