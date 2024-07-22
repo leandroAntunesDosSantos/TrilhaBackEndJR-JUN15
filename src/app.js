@@ -11,8 +11,6 @@ app.use(express.json());
 app.use(rotas);
 
 
-
-// config
 app.listen(process.env.PORTA, () => {
     console.log(`Server is running on port ${process.env.PORTA}`);
     }

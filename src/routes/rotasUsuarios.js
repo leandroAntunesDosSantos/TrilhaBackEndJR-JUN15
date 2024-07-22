@@ -1,50 +1,26 @@
 const rotasUsuarios = require('express').Router();
 
-const {criarTabelaPessoa,buscarPessoas, inserirPessoa, alterarPessoa, deletarPessoa} = require("../controllers/Pessoa");
+const {criarTabelaUsuario,criarUsuario,modificarUsuario, deletarUsuario} = require("../controllers/Usuario");
 
-criarTabelaPessoa();
+criarTabelaUsuario();
 
-//todos os usuarios
-rotasUsuarios.get("/",  async (req, res) => {
-    let pessoas = await buscarPessoas();
-    return res.status(201).json(pessoas);
-}
-);
-
-//usuario por id
-rotasUsuarios.get("/:id", async (req, res) => {
-    let pessoas = await buscarPessoas();
-    let pessoa = pessoas.find(pessoa => pessoa.id === Number(req.params.id));
-    return res.status(201).json(pessoa);
- }
-);
-
-//criar usuario
-rotasUsuarios.post("/", (req, res) => {
-    inserirPessoa(req.body);
-    res.status(201).json({
-        message: "Usuário inserido com sucesso"
-    });
+rotasUsuarios.post('/', async (req, res) => {
+    const usuario = req.body;
+    await criarUsuario(usuario);
+    res.status(201).send();
 });
 
-//modificar usuario
-rotasUsuarios.put("/:id", (req, res) => {
-    let {id} = req.params;
-    alterarPessoa(req.body, req.params.id);
-    res.status(200).json({
-        message: "Usuário alterado com sucesso"
-    });
-    }
-);
+rotasUsuarios.put('/:id', async (req, res) => {
+    const usuario = req.body;
+    const id = req.params.id;
+    await modificarUsuario(usuario, id);
+    res.status(200).send();
+});
 
-//deletar usuario
-rotasUsuarios.delete("/:id", (req, res) => {
-    let {id} = req.params;
-    deletarPessoa(id);
-    res.status(200).json({
-        message: "Usuário deletado com sucesso"
-    });
-    }
-);
+rotasUsuarios.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    await deletarUsuario(id);
+    res.status(200).send();
+});
 
 module.exports = rotasUsuarios;
