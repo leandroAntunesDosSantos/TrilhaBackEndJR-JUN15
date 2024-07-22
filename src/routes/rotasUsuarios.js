@@ -5,14 +5,14 @@ const {criarTabelaPessoa,buscarPessoas, inserirPessoa, alterarPessoa, deletarPes
 criarTabelaPessoa();
 
 //todos os usuarios
-rotasUsuarios.get("/usuarios",  async (req, res) => {
+rotasUsuarios.get("/",  async (req, res) => {
     let pessoas = await buscarPessoas();
     return res.status(201).json(pessoas);
 }
 );
 
 //usuario por id
-rotasUsuarios.get("/usuario/:id", async (req, res) => {
+rotasUsuarios.get("/:id", async (req, res) => {
     let pessoas = await buscarPessoas();
     let pessoa = pessoas.find(pessoa => pessoa.id === Number(req.params.id));
     return res.status(201).json(pessoa);
@@ -20,7 +20,7 @@ rotasUsuarios.get("/usuario/:id", async (req, res) => {
 );
 
 //criar usuario
-rotasUsuarios.post("/usuario", (req, res) => {
+rotasUsuarios.post("/", (req, res) => {
     inserirPessoa(req.body);
     res.status(201).json({
         message: "Usuário inserido com sucesso"
@@ -28,7 +28,7 @@ rotasUsuarios.post("/usuario", (req, res) => {
 });
 
 //modificar usuario
-rotasUsuarios.put("/usuario/:id", (req, res) => {
+rotasUsuarios.put("/:id", (req, res) => {
     let {id} = req.params;
     alterarPessoa(req.body, req.params.id);
     res.status(200).json({
@@ -38,7 +38,7 @@ rotasUsuarios.put("/usuario/:id", (req, res) => {
 );
 
 //deletar usuario
-rotasUsuarios.delete("/usuario/:id", (req, res) => {
+rotasUsuarios.delete("/:id", (req, res) => {
     let {id} = req.params;
     deletarPessoa(id);
     res.status(200).json({
