@@ -28,7 +28,7 @@ const buscarTarefa = async (id) =>{
 const inserirTarefa =  async(tarefa) =>{
     const inserirTarefaDB = await openDB();
     await inserirTarefaDB.run(`
-        INSERT INTO Tarefa (titulo, descricao, status) VALUES (?, ?, ?)
+        INSERT INTO Tarefa (titulo, descricao, status ) VALUES (?, ?, ?)
     `, [tarefa.titulo, tarefa.descricao, tarefa.status]);
     await inserirTarefaDB.close();
 }
