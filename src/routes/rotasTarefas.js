@@ -6,18 +6,16 @@ const {criarTabelaTarefa,buscarTarefasUsuario,buscarTarefaId, inserirTarefa, alt
 
 criarTabelaTarefa();
 
-//rotasTarefas.use("/login", rotasLogin);
-//rotasTarefas.use(autenticacao);
 
 //todas as tarefas
-rotasTarefas.get("/", buscarTarefasUsuario);
+rotasTarefas.get("/buscarTarefas", buscarTarefasUsuario);
 
-rotasTarefas.get("/:id", buscarTarefaId);
+rotasTarefas.get("/buscarTarefa/:id", buscarTarefaId);
 
-rotasTarefas.post("/", inserirTarefa);
+rotasTarefas.post("/criar", inserirTarefa);
 
-rotasTarefas.put("/:id", alterarTarefa);
+rotasTarefas.put("/alterar/:id", alterarTarefa);
 
-rotasTarefas.delete("/:id", deletarTarefa);
+rotasTarefas.delete("/deletar/:id", deletarTarefa);
 
 module.exports = rotasTarefas;

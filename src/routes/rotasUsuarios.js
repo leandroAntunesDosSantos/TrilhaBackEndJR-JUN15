@@ -4,17 +4,17 @@ const autenticacao = require("../middlewares/autenticacao");
 
 const {criarTabelaUsuario,criarUsuario,modificarUsuario, deletarUsuario} = require("../controllers/Usuario");
 
+
 criarTabelaUsuario();
 
 
-rotasUsuarios.post('/', criarUsuario);
+rotasUsuarios.post('/criar', criarUsuario);
 
-//estar logado para acessar as rotas
-//rotasUsuarios.use("/login", rotasLogin);
 rotasUsuarios.use(autenticacao);
 
-rotasUsuarios.put('/', modificarUsuario); // Rota para modificar um usuário
+rotasUsuarios.put('/alterar', modificarUsuario);
 
-rotasUsuarios.delete('/', deletarUsuario);
+rotasUsuarios.delete('/deletar', deletarUsuario);
 
 module.exports = rotasUsuarios;
+

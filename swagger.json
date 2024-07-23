@@ -1,0 +1,282 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Trilha Backend Jr",
+    "description": "API para cadastro de usuários e sua tarefas",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Leandro Antunes dos Santos",
+      "email": "leandro_antunes28@hotmail.com"
+    },
+    "license": {
+      "name": "ISC"
+    }
+  },
+  "paths": {
+    "/usuario/criar": {
+      "post": {
+        "summary": "Cria um novo usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              },
+              "example": {
+                "nome": "Beatriz almeida",
+                "email": "beatriz@outlook.com",
+                "senha": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "Erro ao criar usuário"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Faz login de um usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              },
+              "example": {
+                "email": "marcelo@outlook.com",
+                "senha": "123456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário logado com sucesso"
+          },
+          "400": {
+            "description": "Erro ao logar usuário"
+          }
+        }
+      }
+    },
+    "/usuario/alterar": {
+      "put": {
+        "summary": "Atualiza um usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              },
+              "example": {
+                "nome": "Beatriz almeida da Silva",
+                "email": "",
+                "senha": "beatriz_silva@outlook.com"
+              }
+            }
+          }
+        },
+        "responses": {
+            "200": {
+                "description": "Usuário atualizado com sucesso"
+            },
+            "400": {
+                "description": "Erro ao atualizar usuário"
+            }
+        }
+      }
+    },
+    "/usuario/deletar": {
+      "delete": {
+        "summary": "Deleta um usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário deletado com sucesso"
+          },
+          "400": {
+            "description": "Erro ao deletar usuário"
+          }
+        }
+      }
+    },
+    "/tarefa/buscarTarefas": {
+      "get": {
+        "summary": "Busca todas as tarefas de um usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefas encontradas"
+          },
+          "400": {
+            "description": "Erro ao buscar tarefas"
+          }
+        }
+      }
+    },
+    "/tarefa/buscarTarefa/id": {
+      "get": {
+        "summary": "Busca uma tarefa de um usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefa encontrada"
+          },
+          "400": {
+            "description": "Erro ao buscar tarefa"
+          }
+        }
+      }
+    },
+    "/tarefa/criar": {
+      "post": {
+        "summary": "Cria uma nova tarefa",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "titulo": {
+                    "type": "string"
+                  },
+                  "descricao": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "titulo": "Estudar para a prova",
+                "descricao": "Estudar os capítulos 1, 2 e 3"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tarefa criada com sucesso"
+          },
+          "400": {
+            "description": "Erro ao criar tarefa"
+          }
+        }
+      }
+    },
+    "/tarefa/alterar/id": {
+        "put": {
+          "summary": "Atualiza uma tarefa",
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "titulo": {
+                      "type": "string"
+                    },
+                    "descricao": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "titulo": "Estudar para a prova de matemática",
+                  "descricao": "Estudar os capítulos 1, 2, 3 e 4"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Tarefa atualizada com sucesso"
+            },
+            "400": {
+              "description": "Erro ao atualizar tarefa"
+            }
+          }
+        }
+      },
+    "/tarefa/deletar/id": {
+      "delete": {
+        "summary": "Deleta uma tarefa",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarefa deletada com sucesso"
+          },
+          "400": {
+            "description": "Erro ao deletar tarefa"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "senha": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "in": "header"
+      }
+    }
+  }
+}
+
