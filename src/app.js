@@ -2,7 +2,6 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 
-app.use(cors());
 
 const rotas = require("./routes/rotasIndex");
 
@@ -10,8 +9,9 @@ const app = express();
 
 app.use(express.json());
 
-app.use(rotas);
+app.use(cors());
 
+app.use(rotas);
 
 
 
