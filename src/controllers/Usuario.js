@@ -25,7 +25,6 @@ const criarUsuario = async (usuario) =>{
             INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?)
         `, [usuario.nome, usuario.email, usuario.senha]);
         await criarUsuarioDB.close();
-        return res.status(201).json({ mensagem: "Usuário criado com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
@@ -39,7 +38,6 @@ const modificarUsuario = async (usuario, id) =>{
             UPDATE Usuario SET nome = ?, email = ?, senha = ? WHERE id = ?
         `, [usuario.nome, usuario.email, usuario.senha, id]);
         await modificarUsuarioDB.close();
-        return res.status(200).json({ mensagem: "Usuário modificado com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
@@ -50,7 +48,6 @@ const deletarUsuario = async (id) =>{
         const deletarUsuarioDB = await openDB();
         await deletarUsuarioDB.run(`DELETE FROM Usuario WHERE id = ?`, [id]);
         await deletarUsuarioDB.close();
-        return res.status(200).json({ mensagem: "Usuário deletado com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
