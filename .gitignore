@@ -3,4 +3,5 @@ node_modules
 .vscode
 .idea
 
+src/database/database.sqlite
 
