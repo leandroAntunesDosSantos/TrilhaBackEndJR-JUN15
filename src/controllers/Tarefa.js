@@ -14,81 +14,97 @@ const criarTabelaTarefa = async () =>{
         )`);
         await criarTabelaTarefaDB.close();
     } catch (error) {
-        return res.status(400).json({ erro: error.message });
+        return error.message;
     }
 }
 
-const buscarTarefasUsuario = async (usuario_id) =>{
+const buscarTarefasUsuario = async (req,res) =>{
     try {
         const buscarTarefasUsuarioDB = await openDB();
-        let tarefas = await buscarTarefasUsuarioDB.all(`SELECT * FROM Tarefa WHERE usuario_id = ?`, [usuario_id]);
-        if (!tarefas) {
-            return res.status(400).json({ erro: "Nenhuma tarefa foi encontrada"});
+        let tarefas = await buscarTarefasUsuarioDB.all(`SELECT * FROM Tarefa WHERE usuario_id = ?`, [req.usuario.id]);
+        if(tarefas.length === 0){
+            return res.status(404).json({ erro: "Nenhuma tarefa encontrada" });
         }
         await buscarTarefasUsuarioDB.close();
-        return tarefas;
+        return res.status(200).json(tarefas);
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
 
-const buscarTarefaId = async (params_id, user_id) =>{
+const buscarTarefaId = async (req,res) =>{
+    const tarefa_id = req.params.id;
     try {
         const buscarTarefaIdDB = await openDB();
-        let tarefa = await buscarTarefaIdDB.get(`SELECT * FROM Tarefa WHERE id = ? AND usuario_id = ?`, [params_id, user_id]);
-        if (!tarefa) {
-            return res.status(400).json({ erro: "Nenhuma tarefa foi encontrada"});
+        let tarefa = await buscarTarefaIdDB.get(`SELECT * FROM Tarefa WHERE id = ? AND usuario_id = ?`, [tarefa_id, req.usuario.id]);
+        if(!tarefa){
+            return res.status(404).json({ erro: "Tarefa não encontrada" });
         }
         await buscarTarefaIdDB.close();
-        return tarefa;
+        if(tarefa){
+            return res.status(200).json(tarefa);
+        }else{
+            return res.status(404).json({ erro: "Tarefa não encontrada" });
+        }
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
 
-const inserirTarefa = async (tarefa, usuario_id) =>{
+const inserirTarefa = async (req,res) =>{
+    const tarefa = req.body;
     try {
         await validacaoTarefas.validate(tarefa);
         const inserirTarefaDB = await openDB();
         await inserirTarefaDB.run(`
-        INSERT INTO Tarefa (titulo, descricao, status, usuario_id) VALUES (?, ?, ?, ?)
-    `, [tarefa.titulo, tarefa.descricao, tarefa.status, usuario_id]);
+            INSERT INTO Tarefa (titulo, descricao, status, usuario_id) VALUES (?, ?, ?, ?)
+        `, [tarefa.titulo, tarefa.descricao, tarefa.status, req.usuario.id]);
         await inserirTarefaDB.close();
+        return res.status(200).json({ mensagem: "Tarefa criada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
 
-const alterarTarefa = async (tarefa, id_params, user_id) =>{
+const alterarTarefa = async (req,res) =>{
+    const tarefa = req.body;
+    const tarefa_id = req.params.id;
     try {
         await validacaoTarefas.validate(tarefa);
         const alterarTarefaDB = await openDB();
+        const buscartarefa = await alterarTarefaDB.get(`SELECT * FROM Tarefa WHERE id = ? AND usuario_id = ?`, [tarefa_id, req.usuario.id]);
+        if(!buscartarefa){
+            return res.status(404).json({ erro: "Tarefa não encontrada" });
+        }
         await alterarTarefaDB.run(`
-        UPDATE Tarefa SET titulo = ?, descricao = ?, status = ? WHERE id = ? AND usuario_id = ?
-    `, [tarefa.titulo, tarefa.descricao, tarefa.status, id_params, user_id]);
+            UPDATE Tarefa SET titulo = ?, descricao = ?, status = ? WHERE id = ? AND usuario_id = ?
+        `, [tarefa.titulo, tarefa.descricao, tarefa.status, tarefa_id, req.usuario.id]);
         await alterarTarefaDB.close();
+        return res.status(200).json({ mensagem: "Tarefa alterada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
 
-const deletarTarefa = async (tarefa, user_id) =>{
+const deletarTarefa = async (req,res) =>{
+    const tarefa_id = req.params.id;
     try {
         const deletarTarefaDB = await openDB();
-        await deletarTarefaDB.run(`
-        DELETE FROM Tarefa WHERE id = ? AND usuario_id = ?
-    `, [tarefa.id, user_id]);
+        const buscartarefa = await deletarTarefaDB.get(`SELECT * FROM Tarefa WHERE id = ? AND usuario_id = ?`, [tarefa_id, req.usuario.id]);
+        if(!buscartarefa){
+            return res.status(404).json({ erro: "Tarefa não encontrada" });
+        }
+        await deletarTarefaDB.run(`DELETE FROM Tarefa WHERE id = ? AND usuario_id = ?`, [tarefa_id, req.usuario.id]);
         await deletarTarefaDB.close();
+        return res.status(200).json({ mensagem: "Tarefa deletada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
-
-//remocao returns pois apresentava erro
 
 module.exports = {
     criarTabelaTarefa,
-    buscarTarefasUsuario, 
+    buscarTarefasUsuario,
     buscarTarefaId,
     inserirTarefa,
     alterarTarefa,
