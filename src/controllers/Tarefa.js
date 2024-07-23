@@ -54,7 +54,6 @@ const inserirTarefa = async (tarefa, usuario_id) =>{
         INSERT INTO Tarefa (titulo, descricao, status, usuario_id) VALUES (?, ?, ?, ?)
     `, [tarefa.titulo, tarefa.descricao, tarefa.status, usuario_id]);
         await inserirTarefaDB.close();
-        return res.status(201).json({ mensagem: "Tarefa criada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
@@ -68,7 +67,6 @@ const alterarTarefa = async (tarefa, id_params, user_id) =>{
         UPDATE Tarefa SET titulo = ?, descricao = ?, status = ? WHERE id = ? AND usuario_id = ?
     `, [tarefa.titulo, tarefa.descricao, tarefa.status, id_params, user_id]);
         await alterarTarefaDB.close();
-        return res.status(200).json({ mensagem: "Tarefa alterada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
@@ -81,11 +79,12 @@ const deletarTarefa = async (tarefa, user_id) =>{
         DELETE FROM Tarefa WHERE id = ? AND usuario_id = ?
     `, [tarefa.id, user_id]);
         await deletarTarefaDB.close();
-        return res.status(200).json({ mensagem: "Tarefa deletada com sucesso" });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
 }
+
+//remocao returns pois apresentava erro
 
 module.exports = {
     criarTabelaTarefa,
