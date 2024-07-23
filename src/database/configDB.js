@@ -5,7 +5,7 @@ const { open } = require('sqlite');
 
 async function openDB() {
     return open({
-        filename: './data/database.sqlite',
+        filename: './src/database/database.sqlite',
         driver: sqlite.Database
     });
 }
