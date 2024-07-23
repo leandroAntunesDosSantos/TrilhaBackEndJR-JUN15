@@ -6,6 +6,7 @@ const autenticacao = require("../middlewares/autenticacao");
 const rotas = require('express').Router();
 
 rotas.use("/usuario", rotasUsuarios);
+
 rotas.use("/login", rotasLogin);
 
 rotas.use(autenticacao);

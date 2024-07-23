@@ -1,26 +1,20 @@
 const rotasUsuarios = require('express').Router();
+const rotasLogin = require('./rotasLogin');
+const autenticacao = require("../middlewares/autenticacao");
 
 const {criarTabelaUsuario,criarUsuario,modificarUsuario, deletarUsuario} = require("../controllers/Usuario");
 
 criarTabelaUsuario();
 
-rotasUsuarios.post('/', async (req, res) => {
-    const usuario = req.body;
-    await criarUsuario(usuario);
-    res.status(201).send();
-});
 
-rotasUsuarios.put('/:id', async (req, res) => {
-    const usuario = req.body;
-    const id = req.params.id;
-    await modificarUsuario(usuario, id);
-    res.status(200).send();
-});
+rotasUsuarios.post('/', criarUsuario);
 
-rotasUsuarios.delete('/:id', async (req, res) => {
-    const id = req.params.id;
-    await deletarUsuario(id);
-    res.status(200).send();
-});
+//estar logado para acessar as rotas
+//rotasUsuarios.use("/login", rotasLogin);
+rotasUsuarios.use(autenticacao);
+
+rotasUsuarios.put('/', modificarUsuario); // Rota para modificar um usuário
+
+rotasUsuarios.delete('/', deletarUsuario);
 
 module.exports = rotasUsuarios;

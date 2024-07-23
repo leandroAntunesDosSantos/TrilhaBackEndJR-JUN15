@@ -1,53 +1,23 @@
 const rotasTarefas = require('express').Router();
+const rotasLogin = require('./rotasLogin');
+const autenticacao = require("../middlewares/autenticacao");
 
-const {criarTabelaTarefa,buscarTarefaId, inserirTarefa, alterarTarefa, deletarTarefa, buscarTarefasUsuario} = require("../controllers/Tarefa");
+const {criarTabelaTarefa,buscarTarefasUsuario,buscarTarefaId, inserirTarefa, alterarTarefa, deletarTarefa} = require("../controllers/Tarefa");
 
 criarTabelaTarefa();
 
+//rotasTarefas.use("/login", rotasLogin);
+//rotasTarefas.use(autenticacao);
+
 //todas as tarefas
-rotasTarefas.get("/",  async (req, res) => {
-    const {id} = req.params;
-    if(id){
-        let tarefa = await buscarTarefasUsuario(Number(req.usuario.id),Number(id)); 
-        return res.status(201).json(tarefa);
-    }
-    let tarefas = await buscarTarefasUsuario(Number(req.usuario.id));
-    return res.status(201).json(tarefas);
-}
-);
+rotasTarefas.get("/", buscarTarefasUsuario);
 
-//tarefa por id ////////////
-rotasTarefas.get("/:id", async (req, res) => {
-    let tarefa = await buscarTarefaId(Number(req.params.id), Number(req.usuario.id));
-    res.status(201).json(tarefa);
-    }
-);
+rotasTarefas.get("/:id", buscarTarefaId);
 
-//criar tarefa
-rotasTarefas.post("/", (req, res) => {
-    inserirTarefa(req.body, req.usuario.id);
-    res.status(201).json({
-        message: "Tarefa inserida com sucesso"
-    });
-});
+rotasTarefas.post("/", inserirTarefa);
 
-//modificar tarefa
-rotasTarefas.put("/:id", (req, res) => {
-    alterarTarefa(req.body, req.params.id, req.usuario.id);
-    res.status(200).json({
-        message: "Tarefa alterada com sucesso"
-    });
-    }
-);
+rotasTarefas.put("/:id", alterarTarefa);
 
-//deletar tarefa
-
-rotasTarefas.delete("/:id", (req, res) => {
-    deletarTarefa(req.params.id, req.usuario.id);
-    res.status(200).json({
-        message: "Tarefa deletada com sucesso"
-    });
-    }
-);
+rotasTarefas.delete("/:id", deletarTarefa);
 
 module.exports = rotasTarefas;
