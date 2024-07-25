@@ -3,7 +3,7 @@ Projeto desenvolvido em Node.js e banco SQLite para criação de contas de usuá
 
 ## Instalação
 
-```git@github.com:leandroAntunesDosSantos/TrilhaBackEndJR-JUN15.git```
+```git clone git@github.com:leandroAntunesDosSantos/TrilhaBackEndJR-JUN15.git```
 
 ```cd TrilhaBackEndJR-JUN15```
 
