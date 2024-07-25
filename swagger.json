@@ -50,7 +50,7 @@
                 "$ref": "#/components/schemas/Usuario"
               },
               "example": {
-                "email": "marcelo@outlook.com",
+                "email": "beatriz@outlook.com",
                 "senha": "123456"
               }
             }
@@ -82,7 +82,7 @@
               },
               "example": {
                 "nome": "Beatriz almeida da Silva",
-                "email": "",
+                "email": "beatriz@outlook.com",
                 "senha": "beatriz_silva@outlook.com"
               }
             }
@@ -134,12 +134,22 @@
         }
       }
     },
-    "/tarefa/buscarTarefa/id": {
+    "/tarefa/buscarTarefa/{id}": {
       "get": {
         "summary": "Busca uma tarefa de um usuário",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -171,12 +181,16 @@
                   },
                   "descricao": {
                     "type": "string"
+                  },
+                  "status": {
+                    "type": "string"
                   }
                 }
               },
               "example": {
                 "titulo": "Estudar para a prova",
-                "descricao": "Estudar os capítulos 1, 2 e 3"
+                "descricao": "Estudar os capítulos 1, 2 e 3",
+                "status": "pendente"
               }
             }
           }
@@ -218,7 +232,8 @@
                 },
                 "example": {
                   "titulo": "Estudar para a prova de matemática",
-                  "descricao": "Estudar os capítulos 1, 2, 3 e 4"
+                  "descricao": "Estudar os capítulos 1, 2, 3 e 4",
+                  "status": "concluído"
                 }
               }
             }
