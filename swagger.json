@@ -205,12 +205,23 @@
         }
       }
     },
-    "/tarefa/alterar/id": {
+    "/tarefa/alterar/{id}": {
         "put": {
+          
           "summary": "Atualiza uma tarefa",
           "security": [
             {
               "bearerAuth": []
+            }
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             }
           ],
           "requestBody": {
@@ -231,8 +242,8 @@
                   }
                 },
                 "example": {
-                  "titulo": "Estudar para a prova de matemática",
-                  "descricao": "Estudar os capítulos 1, 2, 3 e 4",
+                  "titulo": "Estudar para a prova",
+                  "descricao": "Estudar os capítulos 1, 2 e 3",
                   "status": "concluído"
                 }
               }
@@ -248,12 +259,22 @@
           }
         }
       },
-    "/tarefa/deletar/id": {
+    "/tarefa/deletar/{id}": {
       "delete": {
         "summary": "Deleta uma tarefa",
         "security": [
           {
             "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
