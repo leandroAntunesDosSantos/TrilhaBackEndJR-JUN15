@@ -7,19 +7,20 @@ const bcrypt = require('bcrypt');
 
 const login = async (req, res) => {
     try {
-        await validacaoAutenticacao.validate(req.body);
-        const buscarUsuarioDB = await openDB();
-        const usuario = await buscarUsuarioDB.get(`SELECT * FROM Usuario WHERE email = ?`, [req.body.email]);
-        if(!usuario){
-            return res.status(400).json({ erro: "Email ou senha inválidos" });
+        const usuario = req.body;
+        await validacaoAutenticacao.validate(usuario);
+        const loginDB = await openDB();
+        const buscarUsuario = await loginDB.get(`SELECT * FROM Usuario WHERE email = ?`, [usuario.email]);
+        await loginDB.close();
+        if(!buscarUsuario){
+            return res.status(404).json({ erro: "Usuário não encontrado" });
         }
-        const senhaValida = bcrypt.compare(req.body.senha, senhaSecreta);
-        if(!senhaValida){
-            return res.status(400).json({ erro: "Email ou senha inválidos" });
+        const senhaCorreta = await bcrypt.compare(usuario.senha, buscarUsuario.senha);
+        if(!senhaCorreta){
+            return res.status(400).json({ erro: "Senha incorreta" });
         }
-        await buscarUsuarioDB.close();
-        const token = jwt.sign({ id: usuario.id }, senhaSecreta, { expiresIn: '8h' });
-        return res.status(200).json({token});
+        const token = jwt.sign({ id: buscarUsuario.id }, senhaSecreta, { expiresIn: '1h' });
+        return res.status(200).json({ token });
     } catch (error) {
         return res.status(400).json({ erro: error.message });
     }
@@ -28,3 +29,4 @@ const login = async (req, res) => {
 module.exports = {
     login
 }
+
