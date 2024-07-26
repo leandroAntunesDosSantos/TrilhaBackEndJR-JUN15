@@ -1,5 +1,6 @@
 const openDB = require('../database/configDB');
 const validacaoUsuarios = require('../models/validacaoUsuarios');
+const bcrypt = require('bcrypt');
 
 
 const criarTabelaUsuario = async () =>{
@@ -26,9 +27,11 @@ const criarUsuario = async (req, res) =>{
         if(buscarEmail){
             return res.status(400).json({ Msg: "Email já cadastrado" });
         }
+        const senhaCriptografada = await bcrypt.hash(usuario.senha, 10);
+        
         await criarUsuarioDB.run(`
             INSERT INTO Usuario (nome, email, senha) VALUES (?, ?, ?)
-        `, [usuario.nome, usuario.email, usuario.senha]);
+        `, [usuario.nome, usuario.email, senhaCriptografada]);
         await criarUsuarioDB.close();
         return res.status(201).json({ mensagem: "Usuário criado com sucesso" });
     } catch (error) {
