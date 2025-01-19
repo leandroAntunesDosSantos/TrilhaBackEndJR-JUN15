@@ -34,3 +34,10 @@ Thumbs.db
 # Database files
 src/database/database.sqlite
 
+
+
+# only test file
+# ignore file of docker .dockerignore and Dockerfile
+
+.gitignore
+Dockerfile
