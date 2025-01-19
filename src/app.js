@@ -15,8 +15,8 @@ app.use(cors());
 app.use(rotas);
 
 
-app.listen(process.env.PORTA, () => {
-    console.log(`Server is running on port ${process.env.PORTA}`);
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
     }
 );
 
